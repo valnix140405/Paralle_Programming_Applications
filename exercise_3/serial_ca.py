@@ -57,7 +57,7 @@ def save_snapshot(grid, step_num):
 
 def main():
     np.random.seed(42) # Fix seed for reproducibility
-    N, M = 200, 200
+    N, M = 800, 800
     steps = 20
     
     try:
@@ -69,16 +69,17 @@ def main():
     grid = get_grid(N, M, df)
     
     print(f"Starting Serial CA. Grid: {N}x{M}, Steps: {steps}")
-    start_time = time.time()
     
-    save_snapshot(grid, 0)
+    save_snapshot(grid, 0) # Mover fuera del reloj
+    
+    start_time = time.perf_counter()
     for s in range(1, steps + 1):
         grid = step(grid)
-        if s == steps: # Save only initial and final to save time
-            save_snapshot(grid, s)
             
-    exec_time = time.time() - start_time
+    exec_time = time.perf_counter() - start_time
     print(f"[Serial] Finished in {exec_time:.4f} seconds")
+    
+    save_snapshot(grid, steps) # Mover fuera del reloj
 
 if __name__ == '__main__':
     main()

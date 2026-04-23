@@ -67,7 +67,7 @@ def main():
     # Fix seed per rank to ensure reproducibility and realistic randomness
     random_state = np.random.RandomState(42 + rank) 
     
-    N, M = 200, 200
+    N, M = 800, 800
     steps = 20
     
     if N % size != 0:
@@ -95,7 +95,7 @@ def main():
     local_grid[1:-1, :] = recvbuf
     
     comm.Barrier()
-    start_time = time.time()
+    start_time = time.perf_counter()
     
     for s in range(1, steps + 1):
         # Top boundary exchange
@@ -113,7 +113,7 @@ def main():
         local_grid = local_step(local_grid, random_state)
         
     comm.Barrier()
-    exec_time = time.time() - start_time
+    exec_time = time.perf_counter() - start_time
     
     gatherbuf = None
     if rank == 0:
